@@ -2,3 +2,5 @@ kaggle_dataset/test1
 kaggle_dataset/train
 test1.zip
 train_full.zip
+
+*__pycache__

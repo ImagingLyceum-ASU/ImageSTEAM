@@ -1,14 +1,14 @@
 def makePet():
     pet = {
-        'name' : input("What's the pet's name?"),
-        'age' : int(input("How old is the pet?")),
-        'weight': int(input("How much does the pet weigh in pounds?")),
-        'photo' : input("What does the pet look like?")
+        'name' : input("What's the pet's name? "),
+        'age' : int(input("How old is the pet? ")),
+        'weight': int(input("How much does the pet weigh in pounds? ")),
+        'photo' : input("What does the pet look like? ")
     }
 
-    print("Your Pet's Characteristics\n")
+    print("\nYour Pet's Characteristics")
     for item in pet.items():
-        print(item[0] + ': ', item[1])
+        print(item[0].capitalize() + ': ', item[1])
     
     return pet
 

@@ -9,17 +9,24 @@ def test_func():
     print("Base Test function prints")
 
 def printName():
-    firstName = input("Please input your First Name")
-    lastName = input("Please input your Last Name")
-    print("Nice to meet you, {} {}!".format(firstName, lastName))
+    firstName = input("Please input your First Name: ")
+    lastName = input("Please input your Last Name: ")
+    print("\nNice to meet you, {} {}!".format(firstName, lastName))
     
 def writeStory():
     word = ''
     story = ''
     while word.upper() != 'END':
         story = story + ' ' + word
-        word = input("Please input next word in the story. Input END to finish the story")
-    print(story)
+        word = input("Please input next word in the story. Input END to finish the story: ")
+    print('\n' + story)
+
+def read_image(filepath):
+  tmp_img = cv2.imread(filepath)
+  if len(tmp_img.shape) == 3:
+    tmp_img = tmp_img[:, :, ::-1]
+  
+  return tmp_img
     
 def upload_image():
     uploaded = files.upload()
