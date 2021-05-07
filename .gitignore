@@ -4,3 +4,4 @@ test1.zip
 train_full.zip
 
 *__pycache__
+.vscode
