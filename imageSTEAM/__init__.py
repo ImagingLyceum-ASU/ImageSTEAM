@@ -7,6 +7,7 @@ from . import base
 from . import utils
 from . import pypets
 from . import widgets
+from . import data
 # print('Test Package Import')
 
 # def test_func():
