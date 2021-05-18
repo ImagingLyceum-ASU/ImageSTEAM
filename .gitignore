@@ -3,5 +3,8 @@ kaggle_dataset/train
 test1.zip
 train_full.zip
 
+*scratch*
+
+
 *__pycache__
 .vscode

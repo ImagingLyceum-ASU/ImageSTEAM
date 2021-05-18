@@ -6,10 +6,12 @@ def test_func_utils():
     print("Test function in utils prints")
     
 # Displays an image, converts BGR to RGB
-def display_img(a, title = "Original", dpi=None):
+def display_img(img, title = "Original", dpi=None):
+    vmax = 255 if img.dtype == 'uint8' else 1.0
     if dpi != None:
       plt.figure(dpi=dpi)
-    plt.imshow(a, cmap='gray'), plt.title(title)
+    plt.imshow(img, cmap='gray', vmin=0, vmax=vmax)
+    plt.title(title)
     plt.show()
     
 def crop(image, display=True):
