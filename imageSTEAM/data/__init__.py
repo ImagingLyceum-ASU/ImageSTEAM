@@ -1,7 +1,43 @@
 import imageio as io
 import os.path as osp
 
+from .. import utils
+
 data_dir = osp.abspath(osp.dirname(__file__))
+
+__all__ = ['example',
+           'example_gray',
+           'astronaut',
+           'camera',
+           'coffee',
+           'coins',
+           'page',
+           'amongUs',
+           'headScan',
+           'fruits']
+
+
+def example():
+    return astronaut()
+
+def example_gray():
+    return camera()
+
+
+def astronaut():
+    return io.imread(osp.join(data_dir, 'astronaut.png'))
+
+def camera():
+    return io.imread(osp.join(data_dir, 'camera.png'))
+
+def coffee():
+    return io.imread(osp.join(data_dir, 'coffee.png'))
+
+def coins():
+    return io.imread(osp.join(data_dir, 'coins.png'))
+
+def page():
+    return io.imread(osp.join(data_dir, 'page.png'))
 
 def amongUs():
     return io.imread(osp.join(data_dir, 'AmongUs_gray.png'))
@@ -15,3 +51,26 @@ def headScan():
 
 def fruits():
     return io.imread(osp.join(data_dir, 'fruits.jpg'))
+
+def waldo():
+    return io.imread(osp.join(data_dir, 'waldo.png'))
+
+def choose_image():
+    from ipywidgets import interact
+    from .. import data
+    
+    def _update(name):
+        global img
+        img = getattr(data, name)()
+        utils.display_img(img, title=name)
+        # return img
+    
+    out = interact(_update, name=sorted(set(__all__)));
+    
+    # utils.display_img(out)
+    
+    
+    return img
+
+        
+        
