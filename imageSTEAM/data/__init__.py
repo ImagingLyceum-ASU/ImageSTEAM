@@ -14,7 +14,10 @@ __all__ = ['example',
            'page',
            'amongUs',
            'headScan',
-           'fruits']
+           'fruits',
+           'waldo',
+           'waldo2',
+           'choose_image']
 
 
 def example():
@@ -54,6 +57,9 @@ def fruits():
 
 def waldo():
     return io.imread(osp.join(data_dir, 'waldo.png'))
+
+def waldo2(): # TODO: Combine this to a single Waldo
+    return io.imread(osp.join(data_dir, 'waldo2.png'))
 
 def choose_image():
     from ipywidgets import interact
