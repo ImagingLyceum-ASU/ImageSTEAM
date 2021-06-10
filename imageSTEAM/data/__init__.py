@@ -39,6 +39,9 @@ def coffee():
 def coins():
     return io.imread(osp.join(data_dir, 'coins.png'))
 
+def dog():
+    return io.imread(osp.join(data_dir, 'dog.jpg'))
+
 def page():
     return io.imread(osp.join(data_dir, 'page.png'))
 
@@ -59,7 +62,7 @@ def waldo():
     return io.imread(osp.join(data_dir, 'waldo.png'))
 
 def waldo2(): # TODO: Combine this to a single Waldo
-    return io.imread(osp.join(data_dir, 'waldo2.png'))
+    return io.imread(osp.join(data_dir, 'waldo2.png'))[:,:,:3]
 
 def choose_image():
     from ipywidgets import interact
@@ -71,7 +74,7 @@ def choose_image():
         utils.display_img(img, title=name)
         # return img
     
-    out = interact(_update, name=sorted(set(__all__)));
+    out = interact(_update, name=sorted(set(__all__)-{'example','example_gray','choose_image'}));
     
     # utils.display_img(out)
     
