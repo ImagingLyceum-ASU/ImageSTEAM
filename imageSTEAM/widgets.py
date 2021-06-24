@@ -1,11 +1,74 @@
 from . import utils
 from . import data
+from . import color
 
+import asyncio
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 import ipywidgets as widgets
 from ipywidgets import HBox, VBox, Layout
 from IPython.display import display
+from time import time
+
+
+class Timer:
+    def __init__(self, timeout, callback):
+        self._timeout = timeout
+        self._callback = callback
+
+    async def _job(self):
+        await asyncio.sleep(self._timeout)
+        self._callback()
+
+    def start(self):
+        self._task = asyncio.ensure_future(self._job())
+
+    def cancel(self):
+        self._task.cancel()
+
+def debounce(wait):
+    """ Decorator that will postpone a function's
+        execution until after `wait` seconds
+        have elapsed since the last time it was invoked. """
+    def decorator(fn):
+        timer = None
+        def debounced(*args, **kwargs):
+            nonlocal timer
+            def call_it():
+                fn(*args, **kwargs)
+            if timer is not None:
+                timer.cancel()
+            timer = Timer(wait, call_it)
+            timer.start()
+        return debounced
+    return decorator
+
+
+def throttle(wait):
+    """ Decorator that prevents a function from being called
+        more than once every wait period. """
+    def decorator(fn):
+        time_of_last_call = 0
+        scheduled, timer = False, None
+        new_args, new_kwargs = None, None
+        def throttled(*args, **kwargs):
+            nonlocal new_args, new_kwargs, time_of_last_call, scheduled, timer
+            def call_it():
+                nonlocal new_args, new_kwargs, time_of_last_call, scheduled, timer
+                time_of_last_call = time()
+                fn(*new_args, **new_kwargs)
+                scheduled = False
+            time_since_last_call = time() - time_of_last_call
+            new_args, new_kwargs = args, kwargs
+            if not scheduled:
+                scheduled = True
+                new_wait = max(0, wait - time_since_last_call)
+                timer = Timer(new_wait, call_it)
+                timer.start()
+        return throttled
+    return decorator
+
 
 def cropSegmentation(img):
     h, w = img.shape[:2]
@@ -185,3 +248,69 @@ def templateMatch(image, template):
   
     final_out = VBox([HBox([input_img, input_template]), output_img])
     display(final_out)
+    
+def lightwave():
+
+    l_min, l_max = 380, 780 # wavelength in nm
+    c = 3 * 10**8           # speed of light in m/s
+    Hz_min, Hz_max = [c / (l_max * 10**-9),
+                        c / (l_min * 10**-9)]   # Frequency in Hz
+    THz_min, THz_max = [int(Hz_min * 10**-12),
+                        int(Hz_max * 10**-12)]  # Frequency in THz
+
+    pixel = np.zeros((1,1,3), dtype='uint8')
+
+    wave_out = widgets.Output()
+    rgb_out = widgets.Output()
+    
+    style = {'description_width': 'initial'}
+    sliderA = widgets.FloatSlider(description='Amplitude', value=1, min=0, max=1, step=0.05, style=style)
+    sliderF = widgets.IntSlider(description='Frequency (THz)', value=THz_min, min=THz_min, max=THz_max, step=1, style=style)
+    sliderL = widgets.FloatSlider(description='Wavelength (nm)', value=l_max, min=l_min, max=l_max, step=1, style=style)
+    sliders = VBox([sliderA, sliderF, sliderL])
+
+    # @throttle(0.2)
+    def sliderF_changed(change):
+        new_val = int((c/(change.new * 10**12)) * 10**9)
+        sliderL.value = max(min(new_val, l_max), l_min)
+  
+    # @throttle(0.2)
+    def sliderL_changed(change):
+        sliderF.value = int((c/(change.new * 10**-9)) * 10**-12)
+
+    sliderF.observe(sliderF_changed, names='value')
+    sliderL.observe(sliderL_changed, names='value')
+
+    x = np.linspace(0, l_max*2, 100)/(l_max)
+    def _update_display(A, f, wl):
+        rgb = color.wavelength_to_rgb(wl)
+        pixel[0,0,:] = A * np.asarray(rgb)
+        Freq = 2*np.pi * (l_max / (wl))
+        wave = A * np.sin(Freq * x)
+        plt.figure()
+        ax = plt.axes()
+        plt.ylim(-2,2)
+        plt.xlim(0, l_max*2)
+        plt.xlabel('Length (nm)')
+        plt.ylabel('Amplitude')
+
+        with wave_out:
+            ax.set_facecolor(pixel[0,0,:]/255)
+            plt.plot(x*l_max, wave, c='k', lw='6')
+            plt.plot(x*l_max, wave, c='w', lw='4')
+            ax.axhline(y=0, color='k', lw='1')
+            plt.grid('on')
+            plt.show()
+            wave_out.clear_output(wait=True)
+
+        # with rgb_out:
+        #   plt.imshow(pixel)
+        #   plt.axis('off')
+        #   plt.show()
+        #   rgb_out.clear_output(wait=True)      
+
+    output = widgets.interactive_output(_update_display, 
+                                        {'A': sliderA, 'f': sliderF, 'wl': sliderL})
+
+    final_widget = VBox([wave_out, sliders, rgb_out])
+    display(final_widget)
