@@ -8,6 +8,7 @@ data_dir = osp.abspath(osp.dirname(__file__))
 __all__ = ['example',
            'example_gray',
            'astronaut',
+           'cat_owners'
            'camera',
            'coffee',
            'coins',
@@ -32,6 +33,9 @@ def astronaut():
 
 def camera():
     return io.imread(osp.join(data_dir, 'camera.png'))
+
+def cat_owners():
+    return io.imread(osp.join(data_dir, 'cat_owners.jpeg'))
 
 def coffee():
     return io.imread(osp.join(data_dir, 'coffee.png'))
