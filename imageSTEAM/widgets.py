@@ -235,15 +235,12 @@ def templateMatch(image, template):
     template = cv2.matchTemplate(wlarge, wsmall, cv2.TM_CCOEFF_NORMED)
     (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(template)
 
-    r = 50
+    r = wsmall.shape[:2]
     out = wlarge // 2
-    out[maxLoc[1]:maxLoc[1]+r, maxLoc[0]:maxLoc[0]+r, :] = wlarge[maxLoc[1]:maxLoc[1]+r, maxLoc[0]:maxLoc[0]+r, :]
-    # out[maxLoc[1]-r:maxLoc[1]+r, maxLoc[0]-r:maxLoc[0]+r, :] = wlarge[maxLoc[1]-r:maxLoc[1]+r, maxLoc[0]-r:maxLoc[0]+r, :]
-    # out[maxLoc[0]-r:maxLoc[0]+r, maxLoc[1]-r:maxLoc[1]+r, :] = wlarge[maxLoc[0]-r:maxLoc[0]+r, maxLoc[1]-r:maxLoc[1]+r, :]
-
+    out[maxLoc[1]:maxLoc[1]+r[0], maxLoc[0]:maxLoc[0]+r[1], :] = wlarge[maxLoc[1]:maxLoc[1]+r[0], maxLoc[0]:maxLoc[0]+r[1], :]
   
     with output_img:
-        cv2.rectangle(out, (maxLoc[0],maxLoc[1]), (maxLoc[0]+r,maxLoc[1]+r), color=[0,255,0], thickness=2)
+        cv2.rectangle(out, (maxLoc[0],maxLoc[1]), (maxLoc[0]+r[1],maxLoc[1]+r[0]), color=[0,255,0], thickness=2)
         utils.display_img(out, title="Output", dpi=200)
   
     final_out = VBox([HBox([input_img, input_template]), output_img])
