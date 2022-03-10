@@ -58,10 +58,10 @@ def upload_image():
     return images
 
 def display_video(video):
-    fig = plt.figure(figsize=(12, 12))  #Display size specification
+    fig = plt.figure(figsize=(9,9))  #Display size specification
 
     mov = []
-    for i in range(-10, len(video)):  #Append videos one by one to mov
+    for i in range(len(video)):  #Append videos one by one to mov
         img = plt.imshow(video[i], animated=True)
         plt.axis('off')
         mov.append([img])
