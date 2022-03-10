@@ -2,6 +2,11 @@ import cv2
 import numpy as np
 from google.colab import files
 
+import imageio
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from skimage.transform import resize
+from IPython.display import HTML
 from . import utils
 # print('Base imported')
 
@@ -51,3 +56,18 @@ def upload_image():
             images = temp_img
             
     return images
+
+def display_video(video):
+    fig = plt.figure(figsize=(12, 12))  #Display size specification
+
+    mov = []
+    for i in range(-10, len(video)):  #Append videos one by one to mov
+        img = plt.imshow(video[i], animated=True)
+        plt.axis('off')
+        mov.append([img])
+
+    #Animation creation
+    anime = animation.ArtistAnimation(fig, mov, interval=50, repeat_delay=1000)
+
+    plt.close()
+    return anime
