@@ -5,12 +5,17 @@ from . import color
 import asyncio
 import cv2
 import numpy as np
+import requests
+from google.colab.patches import cv2_imshow
 import matplotlib.pyplot as plt
 import ipywidgets as widgets
 from ipywidgets import HBox, VBox, Layout
 from IPython.display import display
 from time import time
-
+import os
+import cv2
+import numpy as np
+import imageio as io
 
 class Timer:
     def __init__(self, timeout, callback):
@@ -311,3 +316,82 @@ def lightwave():
 
     final_widget = VBox([wave_out, sliders, rgb_out])
     display(final_widget)
+
+def yolo_(image = io.imread('./imageSTEAM/data/cat_owners.jpeg')):
+    # image =   # upload_image()
+    urls = {'yolov3.cfg': 'https://raw.github.com/pjreddie/darknet/master/cfg/yolov3.cfg',
+            'yolov3.weights': 'https://pjreddie.com/media/files/yolov3.weights',
+            'coco.names': 'https://raw.github.com/pjreddie/darknet/master/data/coco.names'}
+
+    for key in urls.keys():
+        if not os.path.isfile(key):
+            print(key)
+            myfile = requests.get(urls[key])
+            open(key, 'wb').write(myfile.content)
+
+    net = cv2.dnn.readNet("yolov3.weights", "yolov3.cfg")
+    classes = []
+    with open("coco.names", "r") as f:
+        classes = [line.strip() for line in f.readlines()]
+
+    layer_names = net.getLayerNames()
+    outputlayers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+
+    colors = np.random.uniform(0, 255, size=(len(classes), 3))
+
+    # loading image
+    img = image[:, :, ::-1].copy()  # data.choose_image()
+    # img = cv2.resize(img,None,fx=2,fy=2)
+    height, width, channels = img.shape
+
+    # detecting objects
+    blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=False)
+
+    # for b in blob:
+    #     for n,img_blob in enumerate(b):
+    #         cv2.imshow(str(n),img_blob)
+
+    net.setInput(blob)
+    outs = net.forward(outputlayers)
+    # print(outs[1])
+
+    # Showing info on screen/ get confidence score of algorithm in detecting an object in blob
+    class_ids = []
+    confidences = []
+    boxes = []
+    for out in outs:
+        for detection in out:
+            scores = detection[5:]
+            class_id = np.argmax(scores)
+            confidence = scores[class_id]
+            if confidence > 0.5:
+                # onject detected
+                center_x = int(detection[0] * width)
+                center_y = int(detection[1] * height)
+                w = int(detection[2] * width)
+                h = int(detection[3] * height)
+
+                # cv2.circle(img,(center_x,center_y),10,(0,255,0),2)
+                # rectangle co-ordinaters
+                x = int(center_x - w / 2)
+                y = int(center_y - h / 2)
+                # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
+
+                boxes.append([x, y, w, h])  # put all rectangle areas
+                confidences.append(
+                    float(confidence))  # how confidence was that object detected and show that percentage
+                class_ids.append(class_id)  # name of the object tha was detected
+
+    indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.4, 0.6)
+
+    font = cv2.FONT_HERSHEY_PLAIN
+    for i in range(len(boxes)):
+        if i in indexes:
+            x, y, w, h = boxes[i]
+            label = str(classes[class_ids[i]])
+            color = colors[i]
+            cv2.rectangle(img, (x, y), (x + w, y + h), color, 6)
+            cv2.putText(img, label, (x + 10, y + 10), font, 2, (255, 255, 255), 2)
+
+    display_img(img[:, :, ::-1], dpi=200)
+    # cv2_imshow(img)
