@@ -1,7 +1,8 @@
 from . import utils
 from . import data
 from . import color
-
+from matplotlib.colors import rgb_to_hsv, hsv_to_rgb
+import cv2
 import asyncio
 import cv2
 import numpy as np
@@ -318,7 +319,6 @@ def lightwave():
     display(final_widget)
 
 def yolo_(image = io.imread('./imageSTEAM/data/cat_owners.jpeg')):
-    # image =   # upload_image()
     urls = {'yolov3.cfg': 'https://raw.github.com/pjreddie/darknet/master/cfg/yolov3.cfg',
             'yolov3.weights': 'https://pjreddie.com/media/files/yolov3.weights',
             'coco.names': 'https://raw.github.com/pjreddie/darknet/master/data/coco.names'}
@@ -395,3 +395,20 @@ def yolo_(image = io.imread('./imageSTEAM/data/cat_owners.jpeg')):
 
     utils.display_img(img[:, :, ::-1], dpi=200)
     # cv2_imshow(img)
+
+
+def greenScreen(image, background):
+  # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+  # defining range to excloude the green color from the image
+  # the list contain -> [ value of the Red, value of the Green, value of the Blue
+  lower_range = np.array([0,230,0])
+  upper_range = np.array([30,255,30])
+  # form [ (0 ->110) for Red, (100 -> 255) for Green, ...]
+  mask = cv2.inRange(image, lower_range, upper_range)
+  # set all other areas to zero except where mask area
+  image[mask != 0] = [0, 0, 0]
+  background = cv2.resize(background, (image.shape[1], image.shape[0]) )
+  # set the mask area with black to be replaced with  Image
+  background[mask == 0 ] = [0, 0, 0]
+  complete_image = background + image
+  plt.imshow(complete_image); plt.show()
