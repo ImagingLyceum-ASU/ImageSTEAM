@@ -393,5 +393,5 @@ def yolo_(image = io.imread('./imageSTEAM/data/cat_owners.jpeg')):
             cv2.rectangle(img, (x, y), (x + w, y + h), color, 6)
             cv2.putText(img, label, (x + 10, y + 10), font, 2, (255, 255, 255), 2)
 
-    display_img(img[:, :, ::-1], dpi=200)
+    utils.display_img(img[:, :, ::-1], dpi=200)
     # cv2_imshow(img)
