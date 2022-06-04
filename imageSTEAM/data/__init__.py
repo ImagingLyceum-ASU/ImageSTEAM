@@ -91,7 +91,7 @@ def waldo():
 
 
 def waldo2():  # TODO: Combine this to a single Waldo
-    return io.imread(osp.join(data_dir, 'waldo2.png'))[:, :, :3]
+    return io.imread(osp.join(data_dir, 'waldo22.png'))[:, :, :3]
 
 
 def choose_image():
