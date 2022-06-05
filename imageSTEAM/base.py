@@ -71,3 +71,4 @@ def display_video(video):
 
     plt.close()
     return anime
+

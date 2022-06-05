@@ -17,6 +17,11 @@ import os
 import cv2
 import numpy as np
 import imageio as io
+import torch
+import glob
+from torch.utils.data import DataLoader
+from torchvision.transforms import ToTensor
+from torchvision import transforms
 
 class Timer:
     def __init__(self, timeout, callback):
@@ -412,3 +417,34 @@ def greenScreen(image, background):
   background[mask == 0 ] = [0, 0, 0]
   complete_image = background + image
   plt.imshow(complete_image); plt.show()
+
+def dl_greenscreen():
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model = torch.hub.load("PeterL1n/RobustVideoMatting", "mobilenetv3").to(device)
+    convert_video = torch.hub.load("PeterL1n/RobustVideoMatting", "converter")
+
+
+    from inference_utils import VideoReader, VideoWriter, ImageSequenceWriter
+
+
+    reader = VideoReader('/content/imageSTEAM/data/greenscreen_video.mp4', transform=ToTensor())
+    writer = ImageSequenceWriter('/content/output3')  # ('output.mp4', frame_rate=30)
+
+    transform = transforms.Compose([
+        transforms.Resize(size=(1080, 1920)),
+        transforms.ToTensor()
+    ])
+    img = Image.open('/content/imageSTEAM/data/greenscreen_bg.jpg')
+    bgr = transform(img).to(device, torch.float32, non_blocking=True)
+    # bgr = torch.tensor([.47, 1, .6]).view(3, 1, 1)         # Green background.
+    rec = [None] * 4  # Initial recurrent states.
+    downsample_ratio = 0.25  # Adjust based on your video.
+
+    with torch.no_grad():
+        for src in DataLoader(reader):  # RGB tensor normalized to 0 ~ 1.
+            fgr, pha, *rec = model(src.to(device), *rec, downsample_ratio)  # Cycle the recurrent states.
+            com = fgr * pha + bgr * (1 - pha)  # Composite to green background.
+            writer.write(com)  # Write frame.
+
+    images = [imageio.imread(file) for file in sorted(glob.glob('/content/output3/*.jpg'))]
+    HTML(display_video(images).to_html5_video())
