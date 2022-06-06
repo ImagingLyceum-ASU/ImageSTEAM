@@ -47,7 +47,7 @@ def pixelHSVExample(pixel):
     display(final_widget)
 
 
-def HSVSegmentation(img=steam.data.fruits()):
+def HSVSegmentation(img):
     img = img.astype('float32') / 255.0
     img_segm = np.zeros_like(img, dtype='float32')
     img_hsv = rgb_to_hsv(img)
@@ -86,7 +86,7 @@ def HSVSegmentation(img=steam.data.fruits()):
     display(final_widget)
 
 
-def HSVSegmentationrange(img=steam.data.fruits()):
+def HSVSegmentationrange(img):
     img = img.astype('float32') / 255.0
     img_segm = np.zeros_like(img, dtype='float32')
     img_hsv = rgb_to_hsv(img)
