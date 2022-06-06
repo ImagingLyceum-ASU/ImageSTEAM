@@ -1,7 +1,7 @@
 import os.path as osp
 
 import imageio as io
-
+import numpy as np
 from .. import utils
 
 data_dir = osp.abspath(osp.dirname(__file__))
@@ -86,7 +86,7 @@ def greenscreen_video():
     return io.get_reader(osp.join(data_dir, 'greenscreen_video.mp4'))
 
 def nerfdata_():
-    return io.get_reader(osp.join(data_dir, 'tiny_nerf_data.npz'))
+    return np.load(osp.join(data_dir, 'tiny_nerf_data.npz'))
 
 def waldo():
     return io.imread(osp.join(data_dir, 'waldo.jpeg'))

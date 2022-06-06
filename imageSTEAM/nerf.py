@@ -99,8 +99,9 @@ def render_rays(network_fn, rays_o, rays_d, near, far, N_samples, rand=False):
 
     return rgb_map, depth_map, acc_map
 
-def loadnerf_():
-    data = np.load('data/tiny_nerf_data.npz')
+def loadnerf_(data):
+    # np.load(osp.join(data_dir, 'tiny_nerf_data.npz'))
+    # data = np.load('data/tiny_nerf_data.npz')
     images = data['images']
     poses = data['poses']
     focal = data['focal']
