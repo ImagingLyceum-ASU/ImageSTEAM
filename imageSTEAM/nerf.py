@@ -114,9 +114,9 @@ def loadnerf_(data):
     plt.imshow(testimg)
     plt.show()
 
-def nerf_():
-
-    data = np.load('data/tiny_nerf_data.npz')
+def nerf_(data):
+    #
+    # data = np.load('data/tiny_nerf_data.npz')
     images = data['images']
     poses = data['poses']
     focal = data['focal']
