@@ -418,26 +418,3 @@ def greenScreen(image, background):
   complete_image = background + image
   plt.imshow(complete_image); plt.show()
 
-def dl_greenscreen():
-
-    reader = VideoReader('/content/imageSTEAM/data/greenscreen_video.mp4', transform=ToTensor())
-    writer = ImageSequenceWriter('/content/output3')  # ('output.mp4', frame_rate=30)
-
-    transform = transforms.Compose([
-        transforms.Resize(size=(1080, 1920)),
-        transforms.ToTensor()
-    ])
-    img = Image.open('/content/imageSTEAM/data/greenscreen_bg.jpg')
-    bgr = transform(img).to(device, torch.float32, non_blocking=True)
-    # bgr = torch.tensor([.47, 1, .6]).view(3, 1, 1)         # Green background.
-    rec = [None] * 4  # Initial recurrent states.
-    downsample_ratio = 0.25  # Adjust based on your video.
-
-    with torch.no_grad():
-        for src in DataLoader(reader):  # RGB tensor normalized to 0 ~ 1.
-            fgr, pha, *rec = model(src.to(device), *rec, downsample_ratio)  # Cycle the recurrent states.
-            com = fgr * pha + bgr * (1 - pha)  # Composite to green background.
-            writer.write(com)  # Write frame.
-
-    images = [imageio.imread(file) for file in sorted(glob.glob('/content/output3/*.jpg'))]
-    HTML(display_video(images).to_html5_video())
