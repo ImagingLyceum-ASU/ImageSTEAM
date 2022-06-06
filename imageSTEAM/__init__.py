@@ -6,6 +6,7 @@ from .widgets import *
 from .color import *
 from .hdr import *
 from .hsv import *
+from .nerf import *
 from . import base
 from . import utils
 from . import pypets
@@ -14,6 +15,7 @@ from . import data
 from . import color
 from . import hdr
 from . import hsv
+from . import nerf
 
 # print('Test Package Import')
 

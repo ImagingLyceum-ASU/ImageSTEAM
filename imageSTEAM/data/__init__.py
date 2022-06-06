@@ -85,10 +85,11 @@ def bgr():
 def greenscreen_video():
     return io.get_reader(osp.join(data_dir, 'greenscreen_video.mp4'))
 
+def nerfdata_():
+    return io.get_reader(osp.join(data_dir, 'tiny_nerf_data.npz'))
 
 def waldo():
     return io.imread(osp.join(data_dir, 'waldo.jpeg'))
-
 
 def waldo2():  # TODO: Combine this to a single Waldo
     return io.imread(osp.join(data_dir, 'waldocrop.jpeg'))[:, :, :3]
