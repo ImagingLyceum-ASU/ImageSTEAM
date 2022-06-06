@@ -419,13 +419,6 @@ def greenScreen(image, background):
   plt.imshow(complete_image); plt.show()
 
 def dl_greenscreen():
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = torch.hub.load("PeterL1n/RobustVideoMatting", "mobilenetv3").to(device)
-    convert_video = torch.hub.load("PeterL1n/RobustVideoMatting", "converter")
-
-
-    from inference_utils import VideoReader, VideoWriter, ImageSequenceWriter
-
 
     reader = VideoReader('/content/imageSTEAM/data/greenscreen_video.mp4', transform=ToTensor())
     writer = ImageSequenceWriter('/content/output3')  # ('output.mp4', frame_rate=30)
