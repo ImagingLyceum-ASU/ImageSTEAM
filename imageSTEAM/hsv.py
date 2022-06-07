@@ -25,9 +25,7 @@ import imageio as io
 
 def pixelHSVExample_(pixel):
     print("here")
-    hsv = cv2.cvtColor(pixel, cv2.COLOR_BGR2HSV)
-    # pixel = pixel.astype('float32') / 255.0
-    # pixel = rgb_to_hsv(pixel)
+    pixel = cv2.cvtColor(pixel, cv2.COLOR_BGR2HSV)
     tmp_img = pixel.copy()
 
     segmented_out = widgets.Output()
@@ -36,22 +34,15 @@ def pixelHSVExample_(pixel):
     sliderV = widgets.FloatSlider(description='Value', value=0.5, min=0, max=1)
     sliders = VBox([sliderH, sliderS, sliderV])
 
-    def _update_display(h, s, v, tmp_img = tmp_img):
+    def _update_display(h, s, v, tmp_img=tmp_img):
 
-        H = hsv[:,:,0]
-        S = hsv[:,:,1]
-        V = hsv[:,:,2]
-        hnew = cv2.add(H, h)
-        snew = cv2.add(S, s)
-        vnew = cv2.add(V, v)
-
-        # combine new hue with s and v
-        tmp_img = cv2.merge([hnew,snew,vnew])
-
-
+        tmp_img[:,:,0] = cv2.add(tmp_img[:,:,0], h)
+        tmp_img[:,:,1] = cv2.add(tmp_img[:,:,1], s)
+        tmp_img[:,:,2] = cv2.add(tmp_img[:,:,2], v)
+        tmp_img = cv2.cvtColor(tmp_img, cv2.COLOR_HSV2RGB)
         with segmented_out:
-            # result = cv2.cvtColor(tmp_img, cv2.COLOR_HSV2RGB)
-            plt.imshow(cv2.cvtColor(tmp_img, cv2.COLOR_HSV2RGB))
+
+            plt.imshow(tmp_img)
             plt.show()
             # segmented_out.clear_output(wait=True)
 
