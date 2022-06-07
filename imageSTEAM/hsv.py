@@ -39,7 +39,7 @@ def pixelHSVExample(pixel):
         for c in range(pixel.shape[2]):
             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
 
-        plt.imshow(tmp_img, cmap='gray')
+        plt.imshow(hsv_to_rgb(tmp_img).astype(np.uint8), cmap='gray')
         plt.show()
 
     output = widgets.interactive_output(_update_display,
