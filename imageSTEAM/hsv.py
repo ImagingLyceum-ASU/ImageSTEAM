@@ -28,7 +28,9 @@ def pixelHSVExample(pixel):
     # pixel = #np.zeros((1,1,3), dtype='float32')
     pixel = pixel.astype('float32') / 255.0
     pixel = rgb_to_hsv(pixel)
-
+    # plt.imshow(hsv_to_rgb(pixel), cmap='gray')
+    # plt.show()
+    segmented_out = widgets.Output()
     sliderH = widgets.FloatSlider(description='Hue', value=0.5, min=0, max=1)
     sliderS = widgets.FloatSlider(description='Saturation', value=0.5, min=0, max=1)
     sliderV = widgets.FloatSlider(description='Value', value=0.5, min=0, max=1)
@@ -39,8 +41,11 @@ def pixelHSVExample(pixel):
         for c in range(pixel.shape[2]):
             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
 
-        plt.imshow(hsv_to_rgb(tmp_img), cmap='gray')
-        plt.show()
+        with segmented_out:
+            plt.imshow(hsv_to_rgb(tmp_img), cmap='gray')
+            plt.show()
+            segmented_out.clear_output(wait=True)
+
 
     output = widgets.interactive_output(_update_display,
                                         {'h': sliderH, 's': sliderS, 'v': sliderV})
