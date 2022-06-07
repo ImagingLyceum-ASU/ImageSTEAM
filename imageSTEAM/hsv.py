@@ -24,14 +24,14 @@ import numpy as np
 import imageio as io
 
 def pixelHSVExample_(pixel):
-    print("here")
+
     pixel = cv2.cvtColor(pixel, cv2.COLOR_BGR2HSV)
     tmp_img = pixel.copy()
 
     segmented_out = widgets.Output()
-    sliderH = widgets.FloatSlider(description='Hue', value=0.5, min=0, max=1)
-    sliderS = widgets.FloatSlider(description='Saturation', value=0.5, min=0, max=1)
-    sliderV = widgets.FloatSlider(description='Value', value=0.5, min=0, max=1)
+    sliderH = widgets.FloatSlider(description='Hue', value=0, min=0, max=1)
+    sliderS = widgets.FloatSlider(description='Saturation', value=0, min=0, max=1)
+    sliderV = widgets.FloatSlider(description='Value', value=0, min=0, max=1)
     sliders = VBox([sliderH, sliderS, sliderV])
 
     def _update_display(h, s, v, tmp_img=tmp_img):
@@ -41,10 +41,9 @@ def pixelHSVExample_(pixel):
         tmp_img[:,:,2] = cv2.add(tmp_img[:,:,2], v)
         tmp_img = cv2.cvtColor(tmp_img, cv2.COLOR_HSV2RGB)
         with segmented_out:
-
             plt.imshow(tmp_img)
             plt.show()
-            # segmented_out.clear_output(wait=True)
+            segmented_out.clear_output(wait=True)
 
 
     output = widgets.interactive_output(_update_display,
