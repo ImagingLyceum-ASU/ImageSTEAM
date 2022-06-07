@@ -35,7 +35,7 @@ def pixelHSVExample_(pixel):
     sliders = VBox([sliderH, sliderS, sliderV])
 
     def _update_display(h, s, v, tmp_img=tmp_img):
-
+        tmp_img = pixel.copy()
         tmp_img[:,:,0] = cv2.add(tmp_img[:,:,0], h)
         tmp_img[:,:,1] = cv2.add(tmp_img[:,:,1], s)
         tmp_img[:,:,2] = cv2.add(tmp_img[:,:,2], v)
