@@ -49,7 +49,7 @@ def pixelHSVExample(pixel):
 
     output = widgets.interactive_output(_update_display,
                                         {'h': sliderH, 's': sliderS, 'v': sliderV})
-    final_widget = VBox([output, sliders])
+    final_widget = VBox([output, sliders,segmented_out])
     display(final_widget)
 
 
