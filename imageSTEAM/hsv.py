@@ -26,9 +26,10 @@ import imageio as io
 
 def pixelHSVExample(pixel):
     # pixel = #np.zeros((1,1,3), dtype='float32')
-    tmp_img = pixel.copy()
+
     pixel = pixel.astype('float32') / 255.0
     pixel = rgb_to_hsv(pixel)
+    tmp_img = pixel.copy()
 
     segmented_out = widgets.Output()
     sliderH = widgets.FloatSlider(description='Hue', value=0.5, min=0, max=1)
@@ -42,7 +43,7 @@ def pixelHSVExample(pixel):
             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
 
         with segmented_out:
-            plt.imshow(tmp_img, cmap='gray')
+            plt.imshow(hsv_to_rgb(tmp_img), cmap='gray')
             plt.show()
             segmented_out.clear_output(wait=True)
 
