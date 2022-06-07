@@ -23,7 +23,43 @@ import cv2
 import numpy as np
 import imageio as io
 
+def pixelHSVExample_(pixel):
+    print("here")
+    hsv = cv2.cvtColor(pixel, cv2.COLOR_BGR2HSV)
+    # pixel = pixel.astype('float32') / 255.0
+    # pixel = rgb_to_hsv(pixel)
+    tmp_img = pixel.copy()
 
+    segmented_out = widgets.Output()
+    sliderH = widgets.FloatSlider(description='Hue', value=0.5, min=0, max=1)
+    sliderS = widgets.FloatSlider(description='Saturation', value=0.5, min=0, max=1)
+    sliderV = widgets.FloatSlider(description='Value', value=0.5, min=0, max=1)
+    sliders = VBox([sliderH, sliderS, sliderV])
+
+    def _update_display(h, s, v, tmp_img = tmp_img):
+
+        H = hsv[:,:,0]
+        S = hsv[:,:,1]
+        V = hsv[:,:,2]
+        hnew = cv2.add(H, h)
+        snew = cv2.add(S, s)
+        vnew = cv2.add(V, v)
+
+        # combine new hue with s and v
+        tmp_img = cv2.merge([hnew,snew,vnew])
+
+
+        with segmented_out:
+            # result = cv2.cvtColor(tmp_img, cv2.COLOR_HSV2RGB)
+            plt.imshow(cv2.cvtColor(tmp_img, cv2.COLOR_HSV2RGB))
+            plt.show()
+            # segmented_out.clear_output(wait=True)
+
+
+    output = widgets.interactive_output(_update_display,
+                                        {'h': sliderH, 's': sliderS, 'v': sliderV})
+    final_widget = VBox([output, sliders,segmented_out])
+    display(final_widget)
 def pixelHSVExample(pixel):
     # pixel = #np.zeros((1,1,3), dtype='float32')
 
@@ -43,7 +79,7 @@ def pixelHSVExample(pixel):
             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
 
         with segmented_out:
-            tmp_img = np.clip(tmp_img,0,1)
+            # tmp_img = np.clip(tmp_img,0,1)
             plt.imshow(hsv_to_rgb(tmp_img), cmap='gray')
             plt.show()
             # segmented_out.clear_output(wait=True)
