@@ -43,9 +43,10 @@ def pixelHSVExample(pixel):
             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
 
         with segmented_out:
+            tmp_img = np.clip(tmp_img,0,1)
             plt.imshow(hsv_to_rgb(tmp_img), cmap='gray')
             plt.show()
-            segmented_out.clear_output(wait=True)
+            # segmented_out.clear_output(wait=True)
 
 
     output = widgets.interactive_output(_update_display,
