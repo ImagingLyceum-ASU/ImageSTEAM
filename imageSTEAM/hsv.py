@@ -29,9 +29,9 @@ def pixelHSVExample_(pixel):
     tmp_img = pixel.copy()
 
     segmented_out = widgets.Output()
-    sliderH = widgets.FloatSlider(description='Hue', value=0, min=0, max=1)
-    sliderS = widgets.FloatSlider(description='Saturation', value=0, min=0, max=1)
-    sliderV = widgets.FloatSlider(description='Value', value=0, min=0, max=1)
+    sliderH = widgets.FloatSlider(description='Hue', value=0, min=0, max=100)
+    sliderS = widgets.FloatSlider(description='Saturation', value=0, min=0, max=100)
+    sliderV = widgets.FloatSlider(description='Value', value=0, min=0, max=100)
     sliders = VBox([sliderH, sliderS, sliderV])
 
     def _update_display(h, s, v, tmp_img=tmp_img):
