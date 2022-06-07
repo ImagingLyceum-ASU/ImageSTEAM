@@ -26,23 +26,23 @@ import imageio as io
 
 def pixelHSVExample(pixel):
     # pixel = #np.zeros((1,1,3), dtype='float32')
+    tmp_img = pixel.copy()
     pixel = pixel.astype('float32') / 255.0
     pixel = rgb_to_hsv(pixel)
-    # plt.imshow(hsv_to_rgb(pixel), cmap='gray')
-    # plt.show()
+
     segmented_out = widgets.Output()
     sliderH = widgets.FloatSlider(description='Hue', value=0.5, min=0, max=1)
     sliderS = widgets.FloatSlider(description='Saturation', value=0.5, min=0, max=1)
     sliderV = widgets.FloatSlider(description='Value', value=0.5, min=0, max=1)
     sliders = VBox([sliderH, sliderS, sliderV])
 
-    def _update_display(h, s, v):
-        tmp_img = pixel.copy()
+    def _update_display(h, s, v, tmp_img):
+
         for c in range(pixel.shape[2]):
             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
 
         with segmented_out:
-            plt.imshow(hsv_to_rgb(tmp_img), cmap='gray')
+            plt.imshow(tmp_img, cmap='gray')
             plt.show()
             segmented_out.clear_output(wait=True)
 
@@ -128,3 +128,29 @@ def HSVSegmentation(img):
     final_widget = VBox([output, sliders, segmented_out])
     display(final_widget)
 
+# def pixelHSVExample(pixel):
+#     # pixel = #np.zeros((1,1,3), dtype='float32')
+#     pixel = pixel.astype('float32') / 255.0
+#     pixel = rgb_to_hsv(pixel)
+#
+#     segmented_out = widgets.Output()
+#     sliderH = widgets.FloatSlider(description='Hue', value=0.5, min=0, max=1)
+#     sliderS = widgets.FloatSlider(description='Saturation', value=0.5, min=0, max=1)
+#     sliderV = widgets.FloatSlider(description='Value', value=0.5, min=0, max=1)
+#     sliders = VBox([sliderH, sliderS, sliderV])
+#
+#     def _update_display(h, s, v):
+#         tmp_img = pixel.copy()
+#         for c in range(pixel.shape[2]):
+#             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
+#
+#         with segmented_out:
+#             plt.imshow(hsv_to_rgb(tmp_img), cmap='gray')
+#             plt.show()
+#             segmented_out.clear_output(wait=True)
+#
+#
+#     output = widgets.interactive_output(_update_display,
+#                                         {'h': sliderH, 's': sliderS, 'v': sliderV})
+#     final_widget = VBox([output, sliders,segmented_out])
+#     display(final_widget)
