@@ -36,7 +36,7 @@ def pixelHSVExample(pixel):
     sliderV = widgets.FloatSlider(description='Value', value=0.5, min=0, max=1)
     sliders = VBox([sliderH, sliderS, sliderV])
 
-    def _update_display(h, s, v, tmp_img):
+    def _update_display(h, s, v, tmp_img = tmp_img):
 
         for c in range(pixel.shape[2]):
             tmp_img[..., c] = pixel[..., c] + [h, s, v][c]
