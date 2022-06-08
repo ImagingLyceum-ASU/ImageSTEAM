@@ -8,7 +8,7 @@ import imageio
 import json
 import random
 import time
-# from run_nerf_helpers import *
+from run_nerf_helpers import *
 # from load_llff import load_llff_data
 # from load_deepvoxels import load_dv_data
 # from load_blender import load_blender_data
@@ -378,12 +378,12 @@ def render_path(render_poses, hwf, chunk, render_kwargs, gt_imgs=None, savedir=N
 def create_nerf(args):
     """Instantiate NeRF's MLP model."""
 
-    embed_fn, input_ch = run_nerf_helpers.get_embedder(args.multires, args.i_embed)
+    embed_fn, input_ch = get_embedder(args.multires, args.i_embed)
 
     input_ch_views = 0
     embeddirs_fn = None
     if args.use_viewdirs:
-        embeddirs_fn, input_ch_views = run_nerf_helpers.get_embedder(
+        embeddirs_fn, input_ch_views = get_embedder(
             args.multires_views, args.i_embed)
     output_ch = 4
     skips = [4]
