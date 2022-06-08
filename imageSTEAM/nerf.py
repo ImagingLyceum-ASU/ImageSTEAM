@@ -199,3 +199,38 @@ def nerf_(data):
 
     print('Done')
 
+import run_nerf
+
+from load_llff import load_llff_data
+from load_deepvoxels import load_dv_data
+from load_blender import load_blender_data
+basedir = './logs'
+expname = 'fern_example'
+
+config = os.path.join(basedir, expname, 'config.txt')
+print('Args:')
+print(open(config, 'r').read())
+parser = run_nerf.config_parser()
+
+args = parser.parse_args('--config {} --ft_path {}'.format(config, os.path.join(basedir, expname, 'model_200000.npy')))
+print('loaded args')
+
+images, poses, bds, render_poses, i_test = load_llff_data(args.datadir, args.factor,
+                                                          recenter=True, bd_factor=.75,
+                                                          spherify=args.spherify)
+H, W, focal = poses[0,:3,-1].astype(np.float32)
+
+H = int(H)
+W = int(W)
+hwf = [H, W, focal]
+
+images = images.astype(np.float32)
+poses = poses.astype(np.float32)
+
+if args.no_ndc:
+    near = tf.reduce_min(bds) * .9
+    far = tf.reduce_max(bds) * 1.
+else:
+    near = 0.
+    far = 1.
+
