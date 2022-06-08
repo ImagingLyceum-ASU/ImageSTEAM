@@ -8,9 +8,9 @@ from .hdr import *
 from .hsv import *
 from .run_nerf import *
 from .run_nerf_helpers import *
-from load_llff import *
-from load_blender import *
-from load_deepvoxels import *
+from .load_llff import *
+from .load_blender import *
+from .load_deepvoxels import *
 from . import base
 from . import utils
 from . import pypets
