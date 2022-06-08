@@ -36,6 +36,46 @@ psnrs = []
 iternums = []
 i_plot = 25
 
+trans_t = lambda t : tf.convert_to_tensor([
+    [1,0,0,0],
+    [0,1,0,0],
+    [0,0,1,t],
+    [0,0,0,1],
+], dtype=tf.float32)
+
+rot_phi = lambda phi : tf.convert_to_tensor([
+    [1,0,0,0],
+    [0,tf.cos(phi),-tf.sin(phi),0],
+    [0,tf.sin(phi), tf.cos(phi),0],
+    [0,0,0,1],
+], dtype=tf.float32)
+
+rot_theta = lambda th : tf.convert_to_tensor([
+    [tf.cos(th),0,-tf.sin(th),0],
+    [0,1,0,0],
+    [tf.sin(th),0, tf.cos(th),0],
+    [0,0,0,1],
+], dtype=tf.float32)
+
+
+def pose_spherical(theta, phi, radius):
+    c2w = trans_t(radius)
+    c2w = rot_phi(phi / 180. * np.pi) @ c2w
+    c2w = rot_theta(theta / 180. * np.pi) @ c2w
+    c2w = np.array([[-1, 0, 0, 0], [0, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 1]]) @ c2w
+    return c2w
+
+
+def f(**kwargs):
+    c2w = pose_spherical(**kwargs)
+    rays_o, rays_d = get_rays(H, W, focal, c2w[:3, :4])
+    rgb, depth, acc = render_rays(model, rays_o, rays_d, near=2., far=6., N_samples=N_samples)
+    img = np.clip(rgb, 0, 1)
+
+    plt.figure(2, figsize=(20, 6))
+    plt.imshow(img)
+    plt.show()
+
 def posenc(x):
     rets = [x]
     for i in range(L_embed):
