@@ -244,7 +244,8 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     
 
     poses, bds, imgs = _load_data(basedir, factor=factor) # factor=8 downsamples original imgs by 8x
-    print('Loaded', basedir, bds.min(), bds.max())
+    # print('Loaded', basedir, bds.min(), bds.max())
+    print('Loaded LLFF data')
     
     # Correct rotation matrix ordering and move variable dim to axis 0
     poses = np.concatenate([poses[:, 1:2, :], -poses[:, 0:1, :], poses[:, 2:, :]], 1)
@@ -267,8 +268,8 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     else:
         
         c2w = poses_avg(poses)
-        print('recentered', c2w.shape)
-        print(c2w[:3,:4])
+        # print('recentered', c2w.shape)
+        # print(c2w[:3,:4])
 
         ## Get spiral
         # Get average pose
@@ -303,12 +304,12 @@ def load_llff_data(basedir, factor=8, recenter=True, bd_factor=.75, spherify=Fal
     render_poses = np.array(render_poses).astype(np.float32)
 
     c2w = poses_avg(poses)
-    print('Data:')
-    print(poses.shape, images.shape, bds.shape)
+    # print('Data:')
+    # print(poses.shape, images.shape, bds.shape)
     
     dists = np.sum(np.square(c2w[:3,3] - poses[:,:3,3]), -1)
     i_test = np.argmin(dists)
-    print('HOLDOUT view is', i_test)
+    # print('HOLDOUT view is', i_test)
     
     images = images.astype(np.float32)
     poses = poses.astype(np.float32)
