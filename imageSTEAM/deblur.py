@@ -102,7 +102,7 @@ def process_video(pairs, predictor, output_dir):
 
 def predict_(img_pattern: str,
          mask_pattern: Optional[str] = None,
-         weights_path='best_fpn.h5',
+         weights_path='fpn_mobilenet.h5',
          out_dir='submit/',
          side_by_side: bool = False,
          video: bool = False):
