@@ -14,7 +14,7 @@ import yaml
 from fire import Fire
 from tqdm import tqdm
 import albumentations as albu
-from models.networks import get_generator
+from .models.networks import get_generator
 
 def get_normalize():
     normalize = albu.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
