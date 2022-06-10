@@ -11,6 +11,7 @@ from .run_nerf_helpers import *
 from .load_llff import *
 from .load_blender import *
 from .load_deepvoxels import *
+from .deblur import *
 from . import base
 from . import utils
 from . import pypets
@@ -24,6 +25,7 @@ from . import run_nerf
 from . import run_nerf_helpers
 from . import load_deepvoxels
 from . import load_blender
+from . import deblur
 from . import load_llff
 # print('Test Package Import')
 
