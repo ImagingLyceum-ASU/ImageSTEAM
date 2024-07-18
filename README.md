@@ -2,8 +2,8 @@
 
 The ImageSTEAM AI and Computer Vision Curriculum project is  a National Science Foundation (NSF) funded program designed to introduce AI and computer vision concepts to middle school students through the development of innovative learning activities in visual and computational media. Our focus is encouraging students to pursue interests in STEM and empowering teachers to train the next generation in upcoming AI technologies that will be prominent in the 21st century. Please visit our [website](https://www.imagesteam.org/home) for a deeper introduction to the ImageSTEAM project, or to take a look at the 60+ lessons developed during or co-designed curriculum workshops. For those interested in learning more about AI, digital images, and neural networks, take a look at our [foundational topic lessons](https://www.imagesteam.org/foundations)
 
-### Google Colab Notebook Examples
-We have also created a collection of google colab notebooks that give a brief introduction to coding with python, working with digital images, and using neural networks for object detection and classification that can be found [here](https://github.com/ImagingLyceum-ASU/ImageSTEAM-notebooks)
+### ImageSTEAM Library/Package
+Computational imaging and neural network topics are difficult concepts on their own, so to make these concepts more accessible for teachers and students at the middle school level, we have created a python library called ImageSTEAM. This library has working examples that help visualize concepts like HSV and Object Detection without requiring extensive coding skills. This library can be used to help reinforce concepts as an individual learner, or can be used as a teaching tool in the classroom. Alongside this library, we have also created a collection of google colab notebooks that give a brief introduction to coding with python, working with digital images, and using neural networks. These notebooks can be found [here](https://github.com/ImagingLyceum-ASU/ImageSTEAM-notebooks)
 
 ## How to cite this repo
 Please cite our EAAI-24 paper which describes the ImageSTEAM program in addition to this Github.
