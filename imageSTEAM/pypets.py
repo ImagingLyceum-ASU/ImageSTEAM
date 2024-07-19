@@ -3,7 +3,7 @@ def makePet():
         'name' : input("What's the pet's name? "),
         'age' : int(input("How old is the pet? ")),
         'weight': int(input("How much does the pet weigh in pounds? ")),
-        'photo' : input("What does the pet look like? ")
+        'photo' : input("What does the pet look like? Use icons like 'o.o' or something equivalent. ")
     }
 
     print("\nYour Pet's Characteristics")
