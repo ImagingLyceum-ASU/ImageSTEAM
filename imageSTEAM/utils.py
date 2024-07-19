@@ -69,7 +69,7 @@ def flip(src, direction='leftright'):
   else:
     fd = 0
     title = 'Up/Down'
-  display_img(cv2.flip(src, fd), title=title)
+  return display_img(cv2.flip(src, fd), title=title)
 
 # Rotates the image
 def rotate(rot, angle, origin, scale=1):
@@ -82,4 +82,4 @@ def rotate(rot, angle, origin, scale=1):
   # rotation - get proper rc length for output?
   M = cv2.getRotationMatrix2D((pt_x,pt_y),angle,scale)
   dst = cv2.warpAffine(rot,M,(cols,rows))
-  display_img(dst, title='Rotated ' + str(angle) + ' Degrees')
+  return display_img(dst, title='Rotated ' + str(angle) + ' Degrees')
