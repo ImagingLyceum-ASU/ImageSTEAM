@@ -82,3 +82,72 @@ def approximate_gradient(dx, dy):
   gradient = gradient / np.max(gradient)
   gradient = (gradient * 255).astype(np.uint8)
   plt.imshow(gradient, cmap='gray')
+
+
+def cos_similarity(a, b):
+  return np.dot(a, b)
+
+def is_it_a_dog(dog_gradient, cat_gradient):
+  g_dog = dog_gradient
+  g_cat = cat_gradient
+  #get new dog image to compare
+  compare_dog = pick_random_image('/content/dog_pic/')
+  compare_dog = cv2.cvtColor(compare_dog, cv2.COLOR_BGR2GRAY)
+  plt.imshow(compare_dog, cmap='gray'), plt.title('Grayscale')
+  plt.show()
+
+  #get approximate gradient of new dog image
+  dx_compare_dog = cv2.filter2D(compare_dog, -1, sobel_x)
+  dy_compare_dog = cv2.filter2D(compare_dog, -1, sobel_y)
+  g_compare_dog = approximate_gradient(dx_compare_dog, dy_compare_dog)
+
+  #Resize the images
+  g_dog, g_compare_dog = resize_simple(g_dog, g_compare_dog)
+  #Dot Product to compare new dog image to previous dog image
+  dog_dog_dot = cos_similarity(g_dog.flatten(), g_compare_dog.flatten())
+  print("Random dog and dog1 dot product: ", dog_dog_dot)
+
+  #compare new dog image to cat image
+  g_cat, g_compare_dog = resize_simple(g_cat, g_compare_dog)
+  cat_dog_dot = cos_similarity(g_cat.flatten(), g_compare_dog.flatten())
+  print("Random dog and cat1 dot product: ", cat_dog_dot)
+
+  if (dog_dog_dot > cat_dog_dot): 
+    print("It might be a dog")
+  elif (dog_dog_dot == cat_dog_dot):
+    print("It might be both a cat and a dog?")
+  else:
+    print("It might be a cat")
+
+def is_it_a_cat(cat_gradient, dog_gradient):
+  g_cat = cat_gradient
+  g_dog = dog_gradient
+
+  #Get new random cat image
+  compare_cat = pick_random_image('/content/cat_pic/') #encapsulate a lot of code to be easier to consume
+  compare_cat = cv2.cvtColor(compare_cat, cv2.COLOR_BGR2GRAY)
+  plt.imshow(compare_cat, cmap='gray'), plt.title('Grayscale')
+  plt.show()
+
+  # Canny Image of the New Image
+  dx_compare_cat = cv2.filter2D(compare_cat, -1, sobel_x)
+  dy_compare_cat = cv2.filter2D(compare_cat, -1, sobel_y)
+  g_compare_cat = approximate_gradient(dx_compare_cat, dy_compare_cat)
+
+  #Resize the images
+  g_cat, g_compare_cat = resize_simple(g_cat, g_compare_cat)
+  #Dot Product to compare new cat to previous cat
+  cat_cat_dot = cos_similarity(g_cat.flatten(), g_compare_cat.flatten())
+  print("Random cat and cat1 dot product: ", cat_cat_dot)
+
+  #Compare new cat to dog
+  g_dog, g_compare_cat = resize_simple(g_dog, g_compare_cat)
+  dog_cat_dot = cos_similarity(g_dog.flatten(), g_compare_cat.flatten())
+  print("Random cat and dog1 dot product: ", dog_cat_dot)
+
+  if (cat_cat_dot > dog_cat_dot):
+    print("It might be a cat")
+  elif (cat_cat_dot == dog_cat_dot):
+    print("It might be both a cat and a dog?")
+  else:
+    print("It might be a dog")
