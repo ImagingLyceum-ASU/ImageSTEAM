@@ -20,6 +20,7 @@ from . import data
 from . import color
 from . import hdr
 from . import hsv
+from . import obj_comp
 # from . import nerf
 # from . import run_nerf
 # from . import run_nerf_helpers
