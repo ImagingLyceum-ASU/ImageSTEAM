@@ -75,3 +75,10 @@ def extract_images():
   for img in imgs:
     if '.jpg' in img:
       print(img)
+
+
+def approximate_gradient(dx, dy):
+  gradient = np.hypot(dx, dy)
+  gradient = gradient / np.max(gradient)
+  gradient = (gradient * 255).astype(np.uint8)
+  plt.imshow(gradient, cmap='gray')
