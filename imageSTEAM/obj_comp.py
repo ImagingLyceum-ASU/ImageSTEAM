@@ -97,6 +97,12 @@ def is_it_a_dog(dog_gradient, cat_gradient):
   plt.show()
 
   #get approximate gradient of new dog image
+  sobel_x = np.array([[-1, 0, 1],
+                 [-2, 0, 2],
+                 [-1, 0, 1]])
+  sobel_y = np.array([[-1, -2, -1],
+                 [ 0, 0, 0],
+                 [ 1, 2, 1]])
   dx_compare_dog = cv2.filter2D(compare_dog, -1, sobel_x)
   dy_compare_dog = cv2.filter2D(compare_dog, -1, sobel_y)
   g_compare_dog = approximate_gradient(dx_compare_dog, dy_compare_dog)
@@ -130,6 +136,12 @@ def is_it_a_cat(cat_gradient, dog_gradient):
   plt.show()
 
   # Canny Image of the New Image
+  sobel_x = np.array([[-1, 0, 1],
+                 [-2, 0, 2],
+                 [-1, 0, 1]])
+  sobel_y = np.array([[-1, -2, -1],
+                 [ 0, 0, 0],
+                 [ 1, 2, 1]])	
   dx_compare_cat = cv2.filter2D(compare_cat, -1, sobel_x)
   dy_compare_cat = cv2.filter2D(compare_cat, -1, sobel_y)
   g_compare_cat = approximate_gradient(dx_compare_cat, dy_compare_cat)
