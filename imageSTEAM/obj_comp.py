@@ -55,7 +55,6 @@ def extract_images():
 
   local_zip = '/tmp/dog_pic.zip'
   zip_ref = zipfile.ZipFile(local_zip, 'r')
-  zip_ref.printdir()
   zip_ref.extractall('/content')
 
   zip_ref.close() #close zip
@@ -70,3 +69,9 @@ def extract_images():
   copyfile('/content/cat_pic/cat4.jpg', '/content/cat4.jpg')
   copyfile('/content/dog_pic/dog5.jpg', '/content/dog5.jpg') #copy
   copyfile('/content/cat_pic/cat5.jpg', '/content/cat5.jpg')
+  
+  print('Example images to choose from:')
+  imgs = (os.listdir('/content'))
+  for img in imgs:
+    if '.jpg' in img:
+      print(img)
