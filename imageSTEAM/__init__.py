@@ -6,6 +6,7 @@ from .widgets import *
 from .color import *
 from .hdr import *
 from .hsv import *
+from .obj_comp import *
 # from .run_nerf import *
 # from .run_nerf_helpers import *
 # from .load_llff import *
