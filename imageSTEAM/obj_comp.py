@@ -82,6 +82,7 @@ def approximate_gradient(dx, dy):
   gradient = gradient / np.max(gradient)
   gradient = (gradient * 255).astype(np.uint8)
   plt.imshow(gradient, cmap='gray')
+  return gradient
 
 
 def cos_similarity(a, b):
